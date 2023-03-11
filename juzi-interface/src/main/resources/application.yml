@@ -1,0 +1,10 @@
+server:
+  port: 8123
+  servlet:
+    context-path: /api
+
+juzi:
+  api:
+    client:
+      access-key: juzi
+      secret-key: juzi
