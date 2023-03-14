@@ -30,4 +30,6 @@ public interface UserConstant {
     String ADMIN_ROLE = "admin";
 
     // endregion
+
+    String ACCESS_KEY_PREFIX = "cli_";
 }
