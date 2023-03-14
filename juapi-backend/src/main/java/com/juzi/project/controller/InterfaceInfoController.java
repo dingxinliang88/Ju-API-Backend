@@ -2,11 +2,10 @@ package com.juzi.project.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.juzi.juziapiclientsdk.client.JuziApiClient;
+import com.juzi.juziapiclientsdk.model.MockUser;
 import com.juzi.project.annotation.AuthCheck;
-import com.juzi.project.common.BaseResponse;
-import com.juzi.project.common.DeleteRequest;
-import com.juzi.project.common.ErrorCode;
-import com.juzi.project.common.ResultUtils;
+import com.juzi.project.common.*;
 import com.juzi.project.constant.CommonConstant;
 import com.juzi.project.exception.BusinessException;
 import com.juzi.project.model.dto.interfaceinfo.InterfaceInfoAddRequest;
@@ -14,6 +13,7 @@ import com.juzi.project.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
 import com.juzi.project.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
 import com.juzi.project.model.entity.InterfaceInfo;
 import com.juzi.project.model.entity.User;
+import com.juzi.project.model.enums.InterfaceInfoStatusEnum;
 import com.juzi.project.service.InterfaceInfoService;
 import com.juzi.project.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -43,13 +43,16 @@ public class InterfaceInfoController {
     @Resource
     private UserService userService;
 
+    @Resource
+    private JuziApiClient juziApiClient;
+
     // region CRUD
 
     /**
      * 创建
      *
      * @param interfaceInfoAddRequest interface add info request
-     * @param request request
+     * @param request                 request
      * @return
      */
     @PostMapping("/add")
@@ -107,7 +110,7 @@ public class InterfaceInfoController {
      */
     @PostMapping("/update")
     public BaseResponse<Boolean> updateInterfaceInfo(@RequestBody InterfaceInfoUpdateRequest interfaceInfoUpdateRequest,
-                                            HttpServletRequest request) {
+                                                     HttpServletRequest request) {
         if (interfaceInfoUpdateRequest == null || interfaceInfoUpdateRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -197,5 +200,66 @@ public class InterfaceInfoController {
     }
 
     // endregion
+
+    /**
+     * 上线接口
+     *
+     * @param idRequest 接口id
+     * @return true - 上线成功
+     */
+    @PostMapping("/online")
+    @AuthCheck(mustRole = "admin")
+    public BaseResponse<Boolean> onlineInterfaceInfo(@RequestBody IdRequest idRequest) {
+        if(idRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 判断接口是否存在
+        Long id = idRequest.getId();
+        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
+        if(oldInterfaceInfo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "接口不存在");
+        }
+        //判断接口是否能够调用
+        // TODO: 2023/3/14 后期改成地址调用，此处先固定
+        MockUser mockUser = new MockUser();
+        mockUser.setName("juzi");
+        String name = juziApiClient.getNameByPostWithJson(mockUser);
+        if(StringUtils.isBlank(name)) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "接口调用失败");
+        }
+        // 能够调用，修改数据库中interface的状态
+        InterfaceInfo interfaceInfo = new InterfaceInfo();
+        interfaceInfo.setId(id);
+        interfaceInfo.setStatus(InterfaceInfoStatusEnum.ONLINE.getValue());
+        boolean isSuccess = interfaceInfoService.updateById(interfaceInfo);
+        return ResultUtils.success(isSuccess);
+    }
+
+    /**
+     * 下线接口
+     *
+     * @param idRequest 接口id
+     * @return true - 下线成功
+     */
+    @PostMapping("/offline")
+    @AuthCheck(mustRole = "admin")
+    public BaseResponse<Boolean> offlineInterfaceInfo(@RequestBody IdRequest idRequest) {
+        if(idRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 判断接口是否存在
+        Long id = idRequest.getId();
+        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
+        if(oldInterfaceInfo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "接口不存在");
+        }
+
+        // 修改数据库中interface的状态
+        InterfaceInfo interfaceInfo = new InterfaceInfo();
+        interfaceInfo.setId(id);
+        interfaceInfo.setStatus(InterfaceInfoStatusEnum.OFFLINE.getValue());
+        boolean isSuccess = interfaceInfoService.updateById(interfaceInfo);
+        return ResultUtils.success(isSuccess);
+    }
 
 }
