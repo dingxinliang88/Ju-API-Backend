@@ -14,11 +14,12 @@ public enum InterfaceInfoStatusEnum {
     /**
      * interface closed
      */
-    CLOSE("关闭", 0),
+    OFFLINE("下线", 0),
+
     /**
      * interface opened
      */
-    OPEN("开启", 1),
+    ONLINE("上线", 1),
     ;
 
     private final String text;

@@ -95,6 +95,13 @@
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- 引入 sdk -->
+        <dependency>
+            <groupId>com.juzi</groupId>
+            <artifactId>juziapi-client-sdk</artifactId>
+            <version>0.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>
