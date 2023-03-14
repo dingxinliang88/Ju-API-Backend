@@ -1,5 +1,7 @@
 package com.juzi.project.service.impl;
 
+import cn.hutool.core.util.RandomUtil;
+import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.juzi.project.common.ErrorCode;
@@ -15,8 +17,9 @@ import org.springframework.util.DigestUtils;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import static com.juzi.project.constant.UserConstant.ADMIN_ROLE;
-import static com.juzi.project.constant.UserConstant.USER_LOGIN_STATE;
+import static com.juzi.project.constant.CheckConstant.ACCOUNT_MIN_LENGTH;
+import static com.juzi.project.constant.CheckConstant.PASSWORD_MIN_LENGTH;
+import static com.juzi.project.constant.UserConstant.*;
 
 
 /**
@@ -43,10 +46,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
-        if (userAccount.length() < 4) {
+        if (userAccount.length() < ACCOUNT_MIN_LENGTH) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户账号过短");
         }
-        if (userPassword.length() < 8 || checkPassword.length() < 8) {
+        if (userPassword.length() < PASSWORD_MIN_LENGTH || checkPassword.length() < PASSWORD_MIN_LENGTH) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户密码过短");
         }
         // 密码和校验密码相同
@@ -64,10 +67,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             }
             // 2. 加密
             String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
-            // 3. 插入数据
+            // 3. 分配accessKey, secretKey
+            String accessKey = ACCESS_KEY_PREFIX + DigestUtil.md5Hex(SALT + userAccount + RandomUtil.randomLong(4));
+            String secretKey = DigestUtil.md5Hex(SALT + encryptPassword + RandomUtil.randomLong(8));
+            // 4. 插入数据
             User user = new User();
             user.setUserAccount(userAccount);
             user.setUserPassword(encryptPassword);
+            user.setAccessKey(accessKey);
+            user.setSecretKey(secretKey);
             boolean saveResult = this.save(user);
             if (!saveResult) {
                 throw new BusinessException(ErrorCode.SYSTEM_ERROR, "注册失败，数据库错误");
@@ -156,6 +164,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         request.getSession().removeAttribute(USER_LOGIN_STATE);
         return true;
     }
+
+    // TODO: 2023/3/14 用户可以申请修改签名 
 
 }
 
