@@ -1,5 +1,6 @@
 package com.juzi.project.controller;
 
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.juzi.juziapiclientsdk.client.JuziApiClient;
@@ -11,6 +12,7 @@ import com.juzi.project.exception.BusinessException;
 import com.juzi.project.model.dto.interfaceinfo.InterfaceInfoAddRequest;
 import com.juzi.project.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
 import com.juzi.project.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
+import com.juzi.project.model.dto.interfaceinfo.InvokeInterfaceRequest;
 import com.juzi.project.model.entity.InterfaceInfo;
 import com.juzi.project.model.entity.User;
 import com.juzi.project.model.enums.InterfaceInfoStatusEnum;
@@ -210,13 +212,13 @@ public class InterfaceInfoController {
     @PostMapping("/online")
     @AuthCheck(mustRole = "admin")
     public BaseResponse<Boolean> onlineInterfaceInfo(@RequestBody IdRequest idRequest) {
-        if(idRequest == null) {
+        if (idRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         // 判断接口是否存在
         Long id = idRequest.getId();
         InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
-        if(oldInterfaceInfo == null) {
+        if (oldInterfaceInfo == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "接口不存在");
         }
         //判断接口是否能够调用
@@ -224,7 +226,7 @@ public class InterfaceInfoController {
         MockUser mockUser = new MockUser();
         mockUser.setName("juzi");
         String name = juziApiClient.getNameByPostWithJson(mockUser);
-        if(StringUtils.isBlank(name)) {
+        if (StringUtils.isBlank(name)) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "接口调用失败");
         }
         // 能够调用，修改数据库中interface的状态
@@ -244,13 +246,13 @@ public class InterfaceInfoController {
     @PostMapping("/offline")
     @AuthCheck(mustRole = "admin")
     public BaseResponse<Boolean> offlineInterfaceInfo(@RequestBody IdRequest idRequest) {
-        if(idRequest == null) {
+        if (idRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         // 判断接口是否存在
         Long id = idRequest.getId();
         InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
-        if(oldInterfaceInfo == null) {
+        if (oldInterfaceInfo == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "接口不存在");
         }
 
@@ -260,6 +262,42 @@ public class InterfaceInfoController {
         interfaceInfo.setStatus(InterfaceInfoStatusEnum.OFFLINE.getValue());
         boolean isSuccess = interfaceInfoService.updateById(interfaceInfo);
         return ResultUtils.success(isSuccess);
+    }
+
+    /**
+     * 调用接口
+     *
+     * @param invokeInterfaceRequest 调用接口请求参数
+     * @param request
+     * @return 接口返回结果
+     */
+    @PostMapping("/invoke")
+    public BaseResponse<Object> invokeInterface(@RequestBody InvokeInterfaceRequest invokeInterfaceRequest,
+                                                HttpServletRequest request) {
+        // 校验
+        if(invokeInterfaceRequest == null || invokeInterfaceRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 判断接口是否存在
+        Long interfaceId = invokeInterfaceRequest.getId();
+        InterfaceInfo interfaceInfo = interfaceInfoService.getById(interfaceId);
+        if(interfaceInfo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "接口不存在");
+        }
+        // 判断接口是否是开放状态
+        if (interfaceInfo.getStatus() != InterfaceInfoStatusEnum.ONLINE.getValue()) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "接口尚未上线");
+        }
+        // 获取当前登录用户的accessKey, secretKey
+        User loginUser = userService.getLoginUser(request);
+        String accessKey = loginUser.getAccessKey();
+        String secretKey = loginUser.getSecretKey();
+        // 调用接口
+        JuziApiClient juziApiClient = new JuziApiClient(accessKey, secretKey);
+        String requestParams = invokeInterfaceRequest.getRequestParam();
+        MockUser mockUser = JSONUtil.toBean(requestParams, MockUser.class);
+        String result = juziApiClient.getNameByPostWithJson(mockUser);
+        return ResultUtils.success(result);
     }
 
 }
