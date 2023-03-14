@@ -4,10 +4,10 @@ import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import com.juzi.juziapiclientsdk.model.MockUser;
 import com.juzi.juziapiclientsdk.util.SignUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 
 import static com.juzi.juziinterface.constant.ValidConstant.REQ_VALID_TIME_INTERVAL;
 
@@ -16,6 +16,7 @@ import static com.juzi.juziinterface.constant.ValidConstant.REQ_VALID_TIME_INTER
  *
  * @author codejuzi
  */
+@Slf4j
 @RestController
 @RequestMapping("/name")
 public class MockUserController {
