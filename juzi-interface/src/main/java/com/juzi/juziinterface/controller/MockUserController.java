@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 import static com.juzi.juziinterface.constant.ValidConstant.REQ_VALID_TIME_INTERVAL;
 
 /**
@@ -31,10 +34,10 @@ public class MockUserController {
     }
 
     @PostMapping("/user")
-    public String getNameByPostWithJson(@RequestBody MockUser mockUser, HttpServletRequest request) {
+    public String getNameByPostWithJson(@RequestBody MockUser mockUser, HttpServletRequest request) throws UnsupportedEncodingException {
         String accessKey = request.getHeader("accessKey");
         // 防止中文乱码
-        String body = request.getHeader("body");
+        String body = URLDecoder.decode(request.getHeader("body"),"utf-8");
         String sign = request.getHeader("sign");
         String nonce = request.getHeader("nonce");
         String timestamp = request.getHeader("timestamp");

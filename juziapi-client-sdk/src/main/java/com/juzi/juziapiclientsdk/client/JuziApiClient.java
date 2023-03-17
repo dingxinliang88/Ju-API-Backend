@@ -8,6 +8,8 @@ import cn.hutool.json.JSONUtil;
 import com.juzi.juziapiclientsdk.model.MockUser;
 import com.juzi.juziapiclientsdk.util.SignUtil;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +39,7 @@ public class JuziApiClient {
         return HttpUtil.post("http://localhost:8123/api/name", paramMap);
     }
 
-    public String getNameByPostWithJson(MockUser mockUser) {
+    public String getNameByPostWithJson(MockUser mockUser) throws UnsupportedEncodingException {
         String mockUserJson = JSONUtil.toJsonStr(mockUser);
         HttpResponse response = HttpRequest.post("http://localhost:8123/api/name/user")
                 .header("Content-Type", "application/json; charset=utf-8")
@@ -53,12 +55,12 @@ public class JuziApiClient {
         return "fail";
     }
 
-    private Map<String, String> getHeaders(String body) {
-        Map<String, String> header = new HashMap<>();
+    private Map<String, String> getHeaders(String body) throws UnsupportedEncodingException {
+        Map<String, String> header = new HashMap<>(16);
         header.put("accessKey", accessKey);
         header.put("sign", SignUtil.generateSign(body, secretKey));
         // 防止中文乱码
-        header.put("body", body);
+        header.put("body", URLEncoder.encode(body, "utf-8"));
         header.put("nonce", RandomUtil.randomNumbers(5));
         header.put("timestamp", String.valueOf(System.currentTimeMillis()));
         return header;
