@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import static com.juzi.project.constant.InterfaceConstant.MAX_PAGE_SIZE;
@@ -35,7 +36,7 @@ import static com.juzi.project.constant.InterfaceConstant.MAX_PAGE_SIZE;
  * @author juzi
  */
 @RestController
-@RequestMapping("/InterfaceInfo")
+@RequestMapping("/interfaceInfo")
 @Slf4j
 public class InterfaceInfoController {
 
@@ -159,13 +160,13 @@ public class InterfaceInfoController {
     @AuthCheck(mustRole = "admin")
     @GetMapping("/list")
     public BaseResponse<List<InterfaceInfo>> listInterfaceInfo(InterfaceInfoQueryRequest interfaceInfoQueryRequest) {
-        InterfaceInfo postQuery = new InterfaceInfo();
+        InterfaceInfo interfaceInfo = new InterfaceInfo();
         if (interfaceInfoQueryRequest != null) {
-            BeanUtils.copyProperties(interfaceInfoQueryRequest, postQuery);
+            BeanUtils.copyProperties(interfaceInfoQueryRequest, interfaceInfo);
         }
-        QueryWrapper<InterfaceInfo> queryWrapper = new QueryWrapper<>(postQuery);
-        List<InterfaceInfo> postList = interfaceInfoService.list(queryWrapper);
-        return ResultUtils.success(postList);
+        QueryWrapper<InterfaceInfo> queryWrapper = new QueryWrapper<>(interfaceInfo);
+        List<InterfaceInfo> interfaceInfoList = interfaceInfoService.list(queryWrapper);
+        return ResultUtils.success(interfaceInfoList);
     }
 
     /**
@@ -197,8 +198,8 @@ public class InterfaceInfoController {
         queryWrapper.like(StringUtils.isNotBlank(content), "content", content);
         queryWrapper.orderBy(StringUtils.isNotBlank(sortField),
                 sortOrder.equals(CommonConstant.SORT_ORDER_ASC), sortField);
-        Page<InterfaceInfo> postPage = interfaceInfoService.page(new Page<>(current, size), queryWrapper);
-        return ResultUtils.success(postPage);
+        Page<InterfaceInfo> interfaceInfoPage = interfaceInfoService.page(new Page<>(current, size), queryWrapper);
+        return ResultUtils.success(interfaceInfoPage);
     }
 
     // endregion
@@ -211,7 +212,7 @@ public class InterfaceInfoController {
      */
     @PostMapping("/online")
     @AuthCheck(mustRole = "admin")
-    public BaseResponse<Boolean> onlineInterfaceInfo(@RequestBody IdRequest idRequest) {
+    public BaseResponse<Boolean> onlineInterfaceInfo(@RequestBody IdRequest idRequest) throws UnsupportedEncodingException {
         if (idRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -273,7 +274,7 @@ public class InterfaceInfoController {
      */
     @PostMapping("/invoke")
     public BaseResponse<Object> invokeInterface(@RequestBody InvokeInterfaceRequest invokeInterfaceRequest,
-                                                HttpServletRequest request) {
+                                                HttpServletRequest request) throws UnsupportedEncodingException {
         // 校验
         if(invokeInterfaceRequest == null || invokeInterfaceRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);

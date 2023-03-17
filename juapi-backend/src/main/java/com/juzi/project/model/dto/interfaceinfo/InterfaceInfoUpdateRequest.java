@@ -18,7 +18,6 @@ public class InterfaceInfoUpdateRequest implements Serializable {
     /**
      * 主键
      */
-    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
