@@ -1,10 +1,10 @@
 package com.juzi.project.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.juzi.juapicommon.model.entity.InterfaceInfo;
+import com.juzi.juapicommon.model.enums.InterfaceInfoStatusEnum;
 import com.juzi.project.common.ErrorCode;
 import com.juzi.project.exception.BusinessException;
-import com.juzi.project.model.entity.InterfaceInfo;
-import com.juzi.project.model.enums.InterfaceInfoStatusEnum;
 import com.juzi.project.service.InterfaceInfoService;
 import com.juzi.project.mapper.InterfaceInfoMapper;
 import org.apache.commons.lang3.ObjectUtils;

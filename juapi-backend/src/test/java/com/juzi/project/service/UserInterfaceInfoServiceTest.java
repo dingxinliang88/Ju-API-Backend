@@ -1,5 +1,6 @@
 package com.juzi.project.service;
 
+import com.juzi.project.service.impl.inner.InnerUserInterfaceInfoServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -14,11 +15,11 @@ import javax.annotation.Resource;
 class UserInterfaceInfoServiceTest {
 
     @Resource
-    private UserInterfaceInfoService userInterfaceInfoService;
+    private InnerUserInterfaceInfoServiceImpl innerUserInterfaceInfoService;
 
     @Test
     void doContext() {
-        boolean b = userInterfaceInfoService.invokeInterfaceCount(1L, 1L);
+        boolean b = innerUserInterfaceInfoService.invokeInterfaceCount(1L, 1L);
         System.out.println(b);
     }
 

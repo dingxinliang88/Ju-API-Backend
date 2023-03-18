@@ -1,10 +1,10 @@
-package com.juzi.project.model.entity;
+package com.juzi.juapicommon.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 用户调用接口关系表
