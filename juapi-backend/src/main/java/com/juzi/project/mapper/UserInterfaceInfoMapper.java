@@ -2,6 +2,9 @@ package com.juzi.project.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.juzi.juapicommon.model.entity.UserInterfaceInfo;
+import com.juzi.juapicommon.model.vo.InvokeInterfaceInfoVO;
+
+import java.util.List;
 
 /**
  * @author codejuzi
@@ -19,6 +22,14 @@ public interface UserInterfaceInfoMapper extends BaseMapper<UserInterfaceInfo> {
      * @return 是否统计成功
      */
     boolean invokeInterfaceCount(long userId, long interfaceId);
+
+    /**
+     * 统计分析接口调用情况
+     *
+     * @param limit top limit
+     * @return vo list
+     */
+    List<UserInterfaceInfo> listInvokeInterface(int limit);
 
 }
 

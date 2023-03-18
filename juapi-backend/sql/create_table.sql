@@ -23,6 +23,8 @@ create table if not exists api_platform.`interface_info`
     `requestParam`   text                                 not null comment '请求参数'
 ) comment '接口信息表';
 
+
+-- 模拟数据
 insert into api_platform.`interface_info` (`name`, `description`, `url`, `requestHeader`, `responseHeader`, `status`,
                                            `method`, `userId`, `requestParam`)
 values ('尹鹤轩', '杨黎昕', 'www.lorriane-shields.com', '沈志泽', '郑峻熙', 0, 'GET', 7528670535, '龚博超');
@@ -100,6 +102,8 @@ create table if not exists user
     constraint uni_userAccount
         unique (userAccount)
 ) comment '用户';
+
+
 
 -- 用户调用接口关系表
 create table if not exists api_platform.`user_interface_info`
