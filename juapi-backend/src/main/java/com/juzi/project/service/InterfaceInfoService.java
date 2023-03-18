@@ -1,7 +1,7 @@
 package com.juzi.project.service;
 
-import com.juzi.project.model.entity.InterfaceInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.juzi.juapicommon.model.entity.InterfaceInfo;
 
 /**
  * @author codejuzi

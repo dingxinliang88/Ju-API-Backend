@@ -1,10 +1,10 @@
 package com.juzi.project.aop;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.juzi.juapicommon.model.entity.User;
 import com.juzi.project.annotation.AuthCheck;
 import com.juzi.project.common.ErrorCode;
 import com.juzi.project.exception.BusinessException;
-import com.juzi.project.model.entity.User;
 import com.juzi.project.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;

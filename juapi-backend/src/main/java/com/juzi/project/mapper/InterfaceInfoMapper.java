@@ -1,7 +1,7 @@
 package com.juzi.project.mapper;
 
-import com.juzi.project.model.entity.InterfaceInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.juzi.juapicommon.model.entity.InterfaceInfo;
 
 /**
 * @author codejuzi

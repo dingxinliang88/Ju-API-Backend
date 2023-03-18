@@ -1,6 +1,6 @@
 package com.juzi.project.service;
 
-import com.juzi.project.model.entity.User;
+import com.juzi.juapicommon.model.entity.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

@@ -1,4 +1,4 @@
-package com.juzi.project.model.enums;
+package com.juzi.juapicommon.model.enums;
 
 import java.util.Arrays;
 import java.util.List;

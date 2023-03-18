@@ -3,14 +3,14 @@ package com.juzi.project.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
+import com.juzi.juapicommon.model.entity.User;
+import com.juzi.juapicommon.model.vo.UserVO;
 import com.juzi.project.common.BaseResponse;
 import com.juzi.project.common.DeleteRequest;
 import com.juzi.project.common.ErrorCode;
 import com.juzi.project.common.ResultUtils;
 import com.juzi.project.exception.BusinessException;
 import com.juzi.project.model.dto.user.*;
-import com.juzi.project.model.entity.User;
-import com.juzi.project.model.vo.UserVO;
 import com.juzi.project.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -225,14 +225,14 @@ public class UserController {
         }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>(userQuery);
         Page<User> userPage = userService.page(new Page<>(current, size), queryWrapper);
-        Page<UserVO> userVOPage = new PageDTO<>(userPage.getCurrent(), userPage.getSize(), userPage.getTotal());
+        Page<UserVO> userVoPage = new PageDTO<>(userPage.getCurrent(), userPage.getSize(), userPage.getTotal());
         List<UserVO> userVOList = userPage.getRecords().stream().map(user -> {
             UserVO userVO = new UserVO();
             BeanUtils.copyProperties(user, userVO);
             return userVO;
         }).collect(Collectors.toList());
-        userVOPage.setRecords(userVOList);
-        return ResultUtils.success(userVOPage);
+        userVoPage.setRecords(userVOList);
+        return ResultUtils.success(userVoPage);
     }
 
     // endregion
