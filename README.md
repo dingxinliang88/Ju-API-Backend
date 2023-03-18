@@ -1,4 +1,7 @@
 # Ju-API-Backend
+
+![GitHub](https://img.shields.io/github/license/dingxinliang88/Ju-API-Backend)![size](https://img.shields.io/github/languages/code-size/dingxinliang88/Ju-API-Backend)![commit](https://img.shields.io/github/commit-activity/w/dingxinliang88/Ju-API-Backend/master)
+
 > API interface call platform, custom SDK for developers to use
 
 ## 简介
