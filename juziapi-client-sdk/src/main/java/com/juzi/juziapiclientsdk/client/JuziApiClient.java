@@ -20,6 +20,8 @@ import java.util.Map;
  */
 public class JuziApiClient {
 
+    private static final String GATEWAY_HOST = "http://localhost:8090";
+
     private final String accessKey;
 
     private final String secretKey;
@@ -30,18 +32,18 @@ public class JuziApiClient {
     }
 
     public String getNameByGet(String name) {
-        return HttpUtil.get("http://localhost:8123/api/name/" + name);
+        return HttpUtil.get(GATEWAY_HOST + "/api/name/" + name);
     }
 
     public String getNameByPost(String name) {
         Map<String, Object> paramMap = new HashMap<>(1);
         paramMap.put("name", name);
-        return HttpUtil.post("http://localhost:8123/api/name", paramMap);
+        return HttpUtil.post(GATEWAY_HOST + "/api/name", paramMap);
     }
 
     public String getNameByPostWithJson(MockUser mockUser) throws UnsupportedEncodingException {
         String mockUserJson = JSONUtil.toJsonStr(mockUser);
-        HttpResponse response = HttpRequest.post("http://localhost:8123/api/name/user")
+        HttpResponse response = HttpRequest.post(GATEWAY_HOST + "/api/name/user")
                 .header("Content-Type", "application/json; charset=utf-8")
                 .addHeaders(getHeaders(mockUserJson))
                 .body(mockUserJson, "application/json; charset=utf-8")
