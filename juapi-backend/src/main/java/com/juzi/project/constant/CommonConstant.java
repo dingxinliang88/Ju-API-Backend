@@ -16,4 +16,9 @@ public interface CommonConstant {
      * 降序
      */
     String SORT_ORDER_DESC = " descend";
+
+    /**
+     * 默认返回热点接口数
+     */
+    int DEFAULT_TOP_INTERFACE_NUM = 3;
 }

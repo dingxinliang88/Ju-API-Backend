@@ -2,6 +2,9 @@ package com.juzi.project.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.juzi.juapicommon.model.entity.UserInterfaceInfo;
+import com.juzi.juapicommon.model.vo.InvokeInterfaceInfoVO;
+
+import java.util.List;
 
 /**
  * @author codejuzi
