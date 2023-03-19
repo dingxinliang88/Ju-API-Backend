@@ -276,13 +276,13 @@ public class InterfaceInfoController {
     public BaseResponse<Object> invokeInterface(@RequestBody InvokeInterfaceRequest invokeInterfaceRequest,
                                                 HttpServletRequest request) throws UnsupportedEncodingException {
         // 校验
-        if(invokeInterfaceRequest == null || invokeInterfaceRequest.getId() <= 0) {
+        if (invokeInterfaceRequest == null || invokeInterfaceRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         // 判断接口是否存在
         Long interfaceId = invokeInterfaceRequest.getId();
         InterfaceInfo interfaceInfo = interfaceInfoService.getById(interfaceId);
-        if(interfaceInfo == null) {
+        if (interfaceInfo == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "接口不存在");
         }
         // 判断接口是否是开放状态
@@ -293,7 +293,7 @@ public class InterfaceInfoController {
         User loginUser = userService.getLoginUser(request);
         String accessKey = loginUser.getAccessKey();
         String secretKey = loginUser.getSecretKey();
-        // 调用接口
+        // 调用接口（此处仅测试用，具体调用逻辑已在网关完成）
         JuziApiClient juziApiClient = new JuziApiClient(accessKey, secretKey);
         String requestParams = invokeInterfaceRequest.getRequestParam();
         MockUser mockUser = JSONUtil.toBean(requestParams, MockUser.class);

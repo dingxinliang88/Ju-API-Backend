@@ -1,6 +1,6 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/springboot_init_db
-    username: root
-    password: 12345678
+    url:  # 线上地址
+    username: # username
+    password: # your password

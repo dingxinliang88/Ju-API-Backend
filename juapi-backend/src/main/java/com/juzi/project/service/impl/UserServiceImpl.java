@@ -3,6 +3,7 @@ package com.juzi.project.service.impl;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.juzi.juapicommon.model.entity.User;
 import com.juzi.project.common.ErrorCode;
@@ -165,7 +166,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return true;
     }
 
-    // TODO: 2023/3/14 用户可以申请修改签名 
+    @Override
+    public boolean userChangeAccessKey(String accessKey, HttpServletRequest request) {
+        if (StringUtils.isBlank(accessKey)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User loginUser = this.getLoginUser(request);
+        String serverAccessKey = loginUser.getAccessKey();
+        if (!serverAccessKey.equals(accessKey)) {
+            throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
+        }
+        synchronized (loginUser.getId()) {
+            String serverUserAccount = loginUser.getUserAccount();
+            String serverUserPassword = loginUser.getUserPassword();
+            // 生成新签名
+            String newAccessKey = ACCESS_KEY_PREFIX + DigestUtil.md5Hex(SALT + serverUserAccount + RandomUtil.randomLong(4));
+            String newSecretKey = DigestUtil.md5Hex(SALT + serverUserPassword + RandomUtil.randomLong(8));
+            // 修改数据库信息
+            return userMapper.userChangeAccessKey(loginUser.getId(), newAccessKey, newSecretKey);
+        }
+    }
+
 
 }
 

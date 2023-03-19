@@ -6,7 +6,6 @@ import com.juzi.juapicommon.service.InnerUserInterfaceInfoService;
 import com.juzi.project.common.ErrorCode;
 import com.juzi.project.exception.BusinessException;
 import com.juzi.project.mapper.UserInterfaceInfoMapper;
-import com.juzi.project.service.UserInterfaceInfoService;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.transaction.annotation.Transactional;
 
