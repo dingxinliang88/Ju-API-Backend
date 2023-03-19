@@ -56,4 +56,13 @@ public interface UserService extends IService<User> {
      * @return
      */
     boolean userLogout(HttpServletRequest request);
+
+    /**
+     * 用户申请修改签名
+     *
+     * @param accessKey 用户原来的签名ak
+     * @param request   request域对象，获取登录用户信息
+     * @return true - 修改成功， false - 修改失败
+     */
+    boolean userChangeAccessKey(String accessKey, HttpServletRequest request);
 }

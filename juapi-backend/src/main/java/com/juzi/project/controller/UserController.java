@@ -38,7 +38,7 @@ public class UserController {
     /**
      * 用户注册
      *
-     * @param userRegisterRequest
+     * @param userRegisterRequest 用户注册请求参数
      * @return
      */
     @PostMapping("/register")
@@ -236,4 +236,20 @@ public class UserController {
     }
 
     // endregion
+
+    /**
+     * 用户申请修改签名
+     *
+     * @param accessKey 用户原有的ak
+     * @param request   request域对象
+     * @return true - 修改成功， false - 修改失败
+     */
+    @PostMapping("/sign/change")
+    public BaseResponse<Boolean> userChangeAccessKey(@RequestParam(value = "accessKey") String accessKey, HttpServletRequest request) {
+        if (StringUtils.isBlank(accessKey)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        boolean changeAccessKey = userService.userChangeAccessKey(accessKey, request);
+        return ResultUtils.success(changeAccessKey);
+    }
 }
