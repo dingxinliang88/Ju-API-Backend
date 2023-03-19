@@ -9,6 +9,16 @@ import com.juzi.juapicommon.model.entity.User;
  */
 public interface UserMapper extends BaseMapper<User> {
 
+    /**
+     * 用户申请修改签名
+     *
+     * @param userId       用户id
+     * @param newAccessKey 新的ak
+     * @param newSecretKey 新的sk
+     * @return true - 修改成功， false - 修改失败
+     */
+    boolean userChangeAccessKey(long userId, String newAccessKey, String newSecretKey);
+
 }
 
 

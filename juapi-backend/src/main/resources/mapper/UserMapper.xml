@@ -25,4 +25,9 @@
         userPassword,accessKey,secretKey,
         createTime,updateTime,isDelete
     </sql>
+
+    <update id="userChangeAccessKey">
+        update `user` set accessKey = #{newAccessKey}, secretKey = #{newSecretKey}
+        where id = #{userId};
+    </update>
 </mapper>

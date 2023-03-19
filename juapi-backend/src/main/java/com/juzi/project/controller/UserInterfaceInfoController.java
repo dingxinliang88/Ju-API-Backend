@@ -28,7 +28,7 @@ import java.util.List;
 import static com.juzi.project.constant.InterfaceConstant.MAX_PAGE_SIZE;
 
 /**
- * 帖子接口
+ * 用户接口关系管理
  *
  * @author juzi
  */

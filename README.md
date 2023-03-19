@@ -1,6 +1,6 @@
 # Ju-API-Backend
 
-![GitHub](https://img.shields.io/github/license/dingxinliang88/Ju-API-Backend)![size](https://img.shields.io/github/languages/code-size/dingxinliang88/Ju-API-Backend)![commit](https://img.shields.io/github/commit-activity/w/dingxinliang88/Ju-API-Backend/master)
+![GitHub](https://img.shields.io/github/license/dingxinliang88/Ju-API-Backend)	![size](https://img.shields.io/github/languages/code-size/dingxinliang88/Ju-API-Backend)	![commit](https://img.shields.io/github/commit-activity/w/dingxinliang88/Ju-API-Backend/master)
 
 > API interface call platform, custom SDK for developers to use
 
@@ -44,26 +44,25 @@
 ## 项目亮点
 
 1. 🌟🌟🌟**API 签名认证**🌟🌟🌟
-2. 🌟🌟🌟**自定义SDK（Starter）**🌟🌟🌟
+2. 🌟🌟🌟**自定义SDK（Starter**🌟🌟🌟
 3. **RPC远程调用**
 
 ---
 
 ## TODO
 
-1. 用户可以申请更换签名（`AccessKey`、`SecretKey`）
-2. 实现其他用户上传接口
+1. 实现其他用户上传接口
    1. 需要提供一个机制（界面），让用户输入自己的接口 host（服务器地址）、接口信息，将接口信息写入数据库
    2. 可以在 interfaceInfo 表里加个 host 字段，区分服务器地址，让接口提供者更灵活地接入系统
    3. 将接口信息写入数据库之前，要对接口进行校验（比如检查他的地址是否遵循规则，测试调用），保证他是正常的
    4. 将接口信息写入数据库之前遵循咱们的要求（并且使用本项目开发的自定义sdk）
    5. 在接入接口时，平台需要测试这个接口，保证接口可用
-3. 网关校验接口调用次数时需要考虑高并发问题，防止瞬时调用超频
-4. 网关优化
+2. 网关校验接口调用次数时需要考虑高并发问题，防止瞬时调用超频
+3. 网关优化
    1. 增加限流
    2. 降级保护
    3. 提高性能
-   4. 搭配Nginx使用
+   4. 搭配`Nginx`使用
 
 ## 参与本项目
 
@@ -87,3 +86,12 @@
 ## LICENSE
 
 [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
+
+---
+
+## 联系作者
+
+- 邮箱
+  - 网易：d1741530592@163.com
+  - 谷歌：dingxinliang1118@gmail.com
+- QQ：1741530592
